@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pixelpaintcode</title>
+    <script src="code.js"></script>
+</head>
+<style>
+    body{
+      font-family: system-ui, sans-serif;
+      background-color: rgb(185, 185, 185);
+      padding-left: 30%;
+      font-weight: bold;
+    }
+    #canvas {
+      border: 3px dashed rgb(37, 17, 32);
+      border-radius: 5px;
+      cursor: pointer; 
+    }
+    button{
+      background-color: azure;
+      font-family: system-ui, sans-serif;
+      font-size:1rem;
+      cursor: pointer;
+      padding: .1em .6em;
+      font-weight: bold;  
+      border: 1px; 
+    }
+  </style>
+
+<body>
+  <div>
+    <div id="div1">pixelpaintcode</div>
+    <canvas width="450" height="450" id="canvas"></canvas>
+
+  </div>
+
+  <div>
+    <label for="renkgir" style="background-color: rgb(255, 120, 242);">Renk Paleti</label>
+    <input type="color" name="renkler" id="renkgir">
+  </div>
+
+  <div>
+    <button id="clearButton">Canvası Temizle</button>
+  </div>
+
+  <script>
+
+    const canvas =document.getElementById("canvas");
+    const renkgir=document.getElementById("renkgir")
+    const clearButton = document.getElementById("clearButton");
+    const renksecimleri={};
+    const context=canvas.getContext("2d");
+
+
+    const cell= 8;
+    const cellPixellenght=canvas.width/cell;
+    //baslangic 
+    renkgir.value= "#004565";
+    context.fillStyle="#ffffff";//empty
+    context.fillRect(0,0,canvas.width,canvas.height);
+
+
+
+    function canvasMouseclick(i){
+      //eger tiklama  gerceklesmediyse
+      if (i.button !== 0){
+        return;
+      }
+      const boundrect=canvas.getBoundingClientRect();
+      //fare olaylariyla iliskili bir ozelliktir.clientX and Y
+      const X1 =i.clientX - boundrect.left;
+      const Y1=i.clientY - boundrect.top;
+      //math floor yuvarlama islemi icin kullanilir.
+      const x = Math.floor(X1/cellPixellenght);
+      const y = Math.floor(Y1/cellPixellenght);
+
+      paintPixel(x,y);
+
+    }
+
+    function clearCanvasclick(){
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    
+    }
+
+
+    function paintPixel(x,y) {
+
+      const startX = x*cellPixellenght;
+      const startY = y*cellPixellenght;
+      context.fillStyle=renkgir.value;
+      context.fillRect(startX,startY,cellPixellenght,cellPixellenght);
+      renksecimleri['${x}_${y}']= renkgir.value ;
+
+    }
+    //eventler
+    canvas.addEventListener("mousedown",canvasMouseclick);
+    clearButton.addEventListener("click", clearCanvasclick);
+    
+
+
+  </script>
+
+    
+</body>
+</html>
+
+
+</html>
